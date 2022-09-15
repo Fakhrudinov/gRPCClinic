@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+option csharp_namespace = "ClinicServiceProtos";
+
+import "google/protobuf/timestamp.proto";
+
+service PetService {
+
+	rpc CreatePet (CreatePetRequest) returns (CreatePetResponse);
+	rpc UpdatePet (UpdatePetRequest) returns (UpdatePetResponse);
+	rpc DeletePet (DeletePetRequest) returns (DeletePetResponse);
+	rpc GetPetById (GetPetByIdRequest) returns (PetResponse);
+	rpc GetPets (GetPetsRequest) returns (GetPetsResponse);
+}
+
+message CreatePetRequest {
+	int32 clientId = 1;
+	string name = 2;
+	google.protobuf.Timestamp birthday = 3;
+}
+
+message CreatePetResponse {
+	int32 petId = 1;
+	int32 errCode = 2;
+    string errMessage =3;
+}
+
+message UpdatePetRequest {
+    int32 petId = 1;
+    int32 clientId = 2;
+    string name = 3;
+	google.protobuf.Timestamp birthday = 4;
+}
+
+message UpdatePetResponse {
+	int32 errCode = 1;
+    string errMessage =2;
+}
+
+message DeletePetRequest {
+    int32 petId = 1;
+}
+
+message DeletePetResponse {
+	int32 errCode = 1;
+    string errMessage =2;
+}
+
+message GetPetByIdRequest {
+    int32 petId = 1;
+}
+
+message GetPetByIdResponse {
+    PetResponse pet = 1;
+    int32 errCode = 2;
+    string errMessage =3;
+}
+
+message GetPetsRequest{
+}
+
+message GetPetsResponse{
+    repeated PetResponse pets = 1;
+    int32 errCode = 2;
+    string errMessage =3;
+}
+
+message PetResponse {
+	int32 petId = 1;
+	int32 clientId = 2;
+    string name = 3;
+	google.protobuf.Timestamp birthday = 4;
+}
