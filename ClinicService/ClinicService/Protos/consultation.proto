@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+option csharp_namespace = "ClinicServiceProtos";
+
+import "google/protobuf/timestamp.proto";
+
+service ConsultationService {
+
+	rpc CreateConsultation (CreateConsultationRequest) returns (CreateConsultationResponse);
+	rpc UpdateConsultation (UpdateConsultationRequest) returns (UpdateConsultationResponse);
+	rpc DeleteConsultation (DeleteConsultationRequest) returns (DeleteConsultationResponse);
+	rpc GetConsultationById (GetConsultationByIdRequest) returns (ConsultationResponse);
+	rpc GetConsultations (GetConsultationsRequest) returns (GetConsultationsResponse);
+}
+
+message CreateConsultationRequest {
+	int32 clientId = 1;
+	int32 petId = 2;
+	google.protobuf.Timestamp ConsultationDate = 3;
+	string description = 4;
+}
+
+message CreateConsultationResponse {
+	int32 consultationId = 1;
+	int32 errCode = 2;
+    string errMessage =3;
+}
+
+message UpdateConsultationRequest {
+	int32 consultationId = 1;
+    int32 petId = 2;
+    int32 clientId = 3;
+	google.protobuf.Timestamp consultationDate = 4;
+    string name = 5;
+}
+
+message UpdateConsultationResponse {
+	int32 errCode = 1;
+    string errMessage =2;
+}
+
+message DeleteConsultationRequest {
+    int32 consultationId = 1;
+}
+
+message DeleteConsultationResponse {
+	int32 errCode = 1;
+    string errMessage =2;
+}
+
+message GetConsultationByIdRequest {
+    int32 consultationId = 1;
+}
+
+message GetConsultationByIdResponse {
+    ConsultationResponse consultation = 1;
+    int32 errCode = 2;
+    string errMessage =3;
+}
+
+message GetConsultationsRequest{
+
+}
+
+message GetConsultationsResponse{
+    repeated ConsultationResponse consultations = 1;
+    int32 errCode = 2;
+    string errMessage =3;
+}
+
+message ConsultationResponse {
+	int32 consultationId = 1;
+	int32 clientId = 2;
+	int32 petId = 3;
+	google.protobuf.Timestamp consultationDate = 4;
+    string description = 5;
+}
