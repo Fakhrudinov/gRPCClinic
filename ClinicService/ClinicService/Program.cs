@@ -64,6 +64,7 @@ namespace ClinicService
             builder.Services.AddScoped<IPetRepository, PetRepository>();
             builder.Services.AddScoped<IConsultationRepository, ConsultationRepository>();
             builder.Services.AddScoped<IClientRepository, ClientRepository>();
+            builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
             #endregion
 
