@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ClinicService.Data\ClinicService.Data.csproj" />
+    <ProjectReference Include="..\SomeOuterSecretsStorage\SomeOuterSecretsStorage.csproj" />
   </ItemGroup>
 
   <ItemGroup>
