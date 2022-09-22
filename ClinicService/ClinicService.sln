@@ -9,11 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClinicService.Data", "Clini
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClinicClient", "ClinicClient\ClinicClient.csproj", "{27634A93-D557-457B-B718-479517A2C15C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JwtSample", "JwtSample\JwtSample.csproj", "{8AD3554E-DEFE-4152-BF9E-30E362369A10}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JwtSample", "JwtSample\JwtSample.csproj", "{8AD3554E-DEFE-4152-BF9E-30E362369A10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountSample", "AccountSample\AccountSample.csproj", "{0BBAAC83-5B18-4235-BCBC-7E7C8F59A2E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountSample", "AccountSample\AccountSample.csproj", "{0BBAAC83-5B18-4235-BCBC-7E7C8F59A2E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SomeOuterSecretsStorage", "SomeOuterSecretsStorage\SomeOuterSecretsStorage.csproj", "{42B0EDBB-547A-40A2-A85B-195B26611DA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SomeOuterSecretsStorage", "SomeOuterSecretsStorage\SomeOuterSecretsStorage.csproj", "{42B0EDBB-547A-40A2-A85B-195B26611DA0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

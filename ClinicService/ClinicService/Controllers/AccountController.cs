@@ -3,11 +3,15 @@ using ClinicService.Models;
 using ClinicService.Models.Requests;
 using ClinicService.Services;
 using ClinicService.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
 namespace ClinicService.Controllers
 {
+    [Authorize]
+    //новых пользователей в нашем случае может создавать только авторизованный пользователь.
+    //Хорошо бы еще с только ролью админа.
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
@@ -26,7 +30,7 @@ namespace ClinicService.Controllers
         {
             _logger.LogInformation($"Register new user email='{model.EMail}' Name={model.FirstName} LastName={model.LastName}");
 
-            bool exist = await _accRepository.GetIsUserExistByEMail(model.EMail); // tttt@ssss.ru
+            bool exist = await _accRepository.GetIsUserExistByEMail(model.EMail);
 
             if (!exist)
             {

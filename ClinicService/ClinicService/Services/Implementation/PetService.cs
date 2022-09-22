@@ -3,10 +3,12 @@ using ClinicService.Data.Entitys;
 using ClinicServiceProtos;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using static ClinicServiceProtos.PetService;
 
 namespace ClinicService.Services.Implementation
 {
+    [Authorize]
     public class PetService : PetServiceBase
     {
         private readonly ClinicServiceDbContext _dbContext;
