@@ -4,9 +4,11 @@ using Google.Protobuf.WellKnownTypes;
 using static ClinicServiceProtos.ConsultationService;
 using ClinicServiceProtos;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ClinicService.Services.Implementation
 {
+    [Authorize]
     public class ConsultationService : ConsultationServiceBase
     {
         private readonly ClinicServiceDbContext _dbContext;

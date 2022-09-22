@@ -1,5 +1,8 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using ClinicServiceProtos;
+using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
 using Grpc.Net.Client;
+using static ClinicServiceProtos.AuthenticateService;
 using static ClinicServiceProtos.ClinicClientService;
 using static ClinicServiceProtos.ConsultationService;
 using static ClinicServiceProtos.PetService;
@@ -10,23 +13,71 @@ namespace ClinicClient
     {
         static void Main(string[] args)
         {
-            // для работы с незащищенным соединением
+            /*
+            // использовалось для работы с незащищенным соединением
             AppContext.SetSwitch(
                 "System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", 
                 true);
-            
-            var channel = GrpcChannel.ForAddress("http://localhost:5001");
+            GrpcChannel channel = GrpcChannel.ForAddress("http://localhost:5001");// N.B. -----------> http
+            */
+
+            GrpcChannel channel = GrpcChannel.ForAddress("https://localhost:5001");// N.B. -----------> https
+
+            // logon --------------------------------------------------------------
+            AuthenticateServiceClient authenticateServiceClient = new AuthenticateServiceClient(channel);
+            AuthenticationResponse authenticationResponse = authenticateServiceClient.Login(new AuthenticationRequest
+            {
+                UserName = "tttt@ssss.ru",
+                Password = "12345"
+            });
+
+            if (authenticationResponse.Status != 0)
+            {
+                Console.WriteLine("Authentication error.");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.WriteLine($"Session token: {authenticationResponse.SessionContext.SessionToken}");
+
+            // add token to requests --------------------------------------------------------------
+            CallCredentials callCredentials = CallCredentials.FromInterceptor((c, m) =>
+            {
+                m.Add(
+                    "Authorization",
+                    $"Bearer {authenticationResponse.SessionContext.SessionToken}");
+
+                return Task.CompletedTask;
+            });
+
+
+            GrpcChannel protectedChannel = GrpcChannel.ForAddress("https://localhost:5001", new GrpcChannelOptions
+            {
+                Credentials = ChannelCredentials.Create(new SslCredentials(), callCredentials)
+            });
+
+
+
+            /*
+             * обычный какнал только в случае незащищенного соединения
             ClinicClientServiceClient client = new ClinicClientServiceClient(channel);
             PetServiceClient pet = new PetServiceClient(channel);
             ConsultationServiceClient consultation = new ConsultationServiceClient(channel);
+            */
+
+            ClinicClientServiceClient client = new ClinicClientServiceClient(protectedChannel);
+            PetServiceClient pet = new PetServiceClient(protectedChannel);
+            ConsultationServiceClient consultation = new ConsultationServiceClient(protectedChannel);
+
+            
 
             // clients --------------------------------------------------------------
-            var createClientResponse = client.CreateClient(new ClinicServiceProtos.CreateClientRequest
+            CreateClientResponse createClientResponse = client.CreateClient(new ClinicServiceProtos.CreateClientRequest
             {
-                Document = "44qrswer",
-                FirstName = "444qwerq123412341324wer",
-                Surname = "s4444aasdfasdfa",
-                Patronymic = "segrw4rebt34"
+                Document = "55qrswer",
+                FirstName = "55555qwerq123412341324wer",
+                Surname = "s55555aasdfasdfa",
+                Patronymic = "5555segrw4rebt34"
             });
 
             Console.WriteLine($"Client ({createClientResponse.ClientId}) created successfully.");
@@ -45,8 +96,8 @@ namespace ClinicClient
             // pets --------------------------------------------------------------
             var createPetResponse = pet.CreatePet(new ClinicServiceProtos.CreatePetRequest
             {
-                ClientId = 1,
-                Name = "КошкаКошка",
+                ClientId = 2,
+                Name = "Мышка",
                 Birthday = DateTime.UtcNow.ToTimestamp()
             });
 

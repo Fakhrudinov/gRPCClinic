@@ -9,9 +9,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using SomeOuterSecretsStorage;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ClinicService.Services.Implementation
 {
+    [Authorize]
     public class AuthenticateService : IAuthenticateService
     {
         #region Services
@@ -30,9 +32,40 @@ namespace ClinicService.Services.Implementation
 
         public SessionContext GetSessionInfo(string sessionToken)
         {
-            throw new NotImplementedException();
+            SessionContext sessionContext;
+
+            lock (_sessions)
+            {
+                _sessions.TryGetValue(sessionToken, out sessionContext);
+            }
+
+            if (sessionContext == null)
+            {
+                using IServiceScope scope = _serviceScopeFactory.CreateScope();
+                ClinicServiceDbContext context = scope.ServiceProvider.GetRequiredService<ClinicServiceDbContext>();
+
+                AccountSession session = context
+                     .AccountSessions
+                     .FirstOrDefault(item => item.SessionToken == sessionToken);
+
+                if (session == null)
+                    return null;
+
+                Account account = context.Accounts.FirstOrDefault(item => item.AccountId == session.AccountId);
+
+                sessionContext = GetSessionContext(account, session);
+
+                lock (_sessions)
+                {
+                    _sessions[sessionContext.SessionToken] = sessionContext;
+                }
+
+            }
+
+            return sessionContext;
         }
 
+        [AllowAnonymous]
         public AuthenticationResponse Login(AuthenticationRequest authenticationRequest)
         {
             using IServiceScope scope = _serviceScopeFactory.CreateScope();

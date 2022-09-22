@@ -3,9 +3,11 @@ using ClinicService.Services;
 using Microsoft.AspNetCore.Mvc;
 using ClinicService.Data.Entitys;
 using ClinicService.Models.Requests;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ClinicService.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ConsultationController : ControllerBase
